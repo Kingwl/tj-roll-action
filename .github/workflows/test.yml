@@ -10,7 +10,8 @@ jobs:
       - name: Tj roll action step
         uses: ./
         id: roll
-        apply-code: '0000000000000'
+        with:
+          apply-code: '0000000000000'
       - name: Get the result
         run: echo "The result was ${{ steps.roll.outputs.result }} ${{ steps.roll.outputs.name }}"
 
