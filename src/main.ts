@@ -5,7 +5,7 @@ import * as cherrio from 'cheerio'
 
 const url = 'http://apply.xkctk.jtys.tj.gov.cn/apply/norm/personQuery.html'
 
-async function runRequest(issueNumber: string, applyCode: string) {
+async function runRequest(applyCode: string, issueNumber: string) {
   const options = qs.stringify({
     pageNo: 1,
     issueNumber,
@@ -53,21 +53,26 @@ function parseResult(content: string): Result {
   }
 }
 
+async function main(applyCode: string, issueNumber: string): Promise<Result> {
+  console.log(
+    `Apply code is: ${applyCode.slice(0, 4)}*****${applyCode.slice(4 + 5)}`
+  )
+  console.log(`Issue number is: ${issueNumber}`)
+  console.log(`Let's check!`)
+
+  const resp = await runRequest(applyCode, issueNumber)
+  console.log(`Request succeed`)
+  console.log('Parse start')
+  const result = parseResult(resp.data)
+  console.log('All done!')
+  return result
+}
+
 async function run(): Promise<void> {
   try {
     const applyCode = core.getInput('apply-code')
     const issueNumber = core.getInput('issue-number')
-
-    console.log(
-      `Apply code is: ${applyCode.slice(0, 4)}*****${applyCode.slice(4 + 5)}`
-    )
-    console.log(`Issue number is: ${issueNumber}`)
-    console.log(`Let's check!`)
-
-    const resp = await runRequest(applyCode, issueNumber)
-    console.log(`Request succeed`)
-    console.log('Parse start')
-    const result = parseResult(resp.data)
+    const result = await main(applyCode, issueNumber)
 
     if (result.type === ResultType.Failed) {
       console.log('Sorry, You did not win.')
@@ -79,8 +84,6 @@ async function run(): Promise<void> {
       core.setOutput('result', true)
       core.setOutput('name', result.name)
     }
-
-    console.log('All done!')
   } catch (error) {
     core.setFailed(error.message)
   }

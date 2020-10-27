@@ -3112,7 +3112,7 @@ const axios_1 = __importDefault(__webpack_require__(545));
 const qs = __importStar(__webpack_require__(191));
 const cherrio = __importStar(__webpack_require__(94));
 const url = 'http://apply.xkctk.jtys.tj.gov.cn/apply/norm/personQuery.html';
-function runRequest(issueNumber, applyCode) {
+function runRequest(applyCode, issueNumber) {
     return __awaiter(this, void 0, void 0, function* () {
         const options = qs.stringify({
             pageNo: 1,
@@ -3147,18 +3147,25 @@ function parseResult(content) {
         name
     };
 }
+function main(applyCode, issueNumber) {
+    return __awaiter(this, void 0, void 0, function* () {
+        console.log(`Apply code is: ${applyCode.slice(0, 4)}*****${applyCode.slice(4 + 5)}`);
+        console.log(`Issue number is: ${issueNumber}`);
+        console.log(`Let's check!`);
+        const resp = yield runRequest(applyCode, issueNumber);
+        console.log(`Request succeed`);
+        console.log('Parse start');
+        const result = parseResult(resp.data);
+        console.log('All done!');
+        return result;
+    });
+}
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const applyCode = core.getInput('apply-code');
             const issueNumber = core.getInput('issue-number');
-            console.log(`Apply code is: ${applyCode.slice(0, 4)}*****${applyCode.slice(4 + 5)}`);
-            console.log(`Issue number is: ${issueNumber}`);
-            console.log(`Let's check!`);
-            const resp = yield runRequest(applyCode, issueNumber);
-            console.log(`Request succeed`);
-            console.log('Parse start');
-            const result = parseResult(resp.data);
+            const result = yield main(applyCode, issueNumber);
             if (result.type === ResultType.Failed) {
                 console.log('Sorry, You did not win.');
                 core.setOutput('result', false);
@@ -3169,7 +3176,6 @@ function run() {
                 core.setOutput('result', true);
                 core.setOutput('name', result.name);
             }
-            console.log('All done!');
         }
         catch (error) {
             core.setFailed(error.message);
