@@ -11,7 +11,7 @@ jobs:
         uses: ./
         id: roll
         with:
-          apply-code: '0000000000000'
+          apply-code: ${{ secrets.TEST_APPLY_CODE }}
       - name: Get the result
-        run: echo "The result was ${{ steps.roll.outputs.result }} ${{ steps.roll.outputs.name }}"
+        run: echo "The result was ${{ steps.roll.outputs.result }}"
 
