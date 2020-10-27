@@ -1,24 +1,16 @@
-name: 'build-test'
-on: # rebuild any PRs and main branch changes
-  pull_request:
-  push:
-    branches:
-      - main
-      - 'releases/*'
+name: 'action-test'
+on: [push]
 
 jobs:
-  build: # make sure build/ci work properly
+  test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - run: |
-          npm install
-      - run: |
-          npm run all
-  test: # make sure the action works on a clean machine without building
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: ./
-        with:
-          milliseconds: 1000
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Tj roll action step
+        uses: ./
+        id: roll
+        apply-code: '0000000000000'
+      - name: Get the result
+        run: echo "The result was ${{ steps.roll.outputs.result }} ${{ steps.roll.outputs.name }}"
+
