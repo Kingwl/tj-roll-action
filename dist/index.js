@@ -3152,7 +3152,7 @@ function run() {
         try {
             const applyCode = core.getInput('apply-code');
             const issueNumber = core.getInput('issue-number');
-            console.log(`Apply code is: ${applyCode}`);
+            console.log(`Apply code is: ${applyCode.slice(0, 4)}*****${applyCode.slice(4 + 5)}`);
             console.log(`Issue number is: ${issueNumber}`);
             console.log(`Let's check!`);
             const resp = yield runRequest(applyCode, issueNumber);
