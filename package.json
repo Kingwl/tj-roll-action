@@ -1,8 +1,8 @@
 {
-  "name": "typescript-action",
-  "version": "0.0.0",
+  "name": "tj-roll-action",
+  "version": "0.0.1",
   "private": true,
-  "description": "TypeScript template action",
+  "description": "Check the result of tj car id roll",
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",
@@ -14,8 +14,7 @@
     "all": "npm run build && npm run format && npm run lint && npm run package"
   },
   "repository": {
-    "type": "git",
-    "url": "git+https://github.com/actions/typescript-action.git"
+    "url": "https://github.com/Kingwl/tj-roll-action"
   },
   "keywords": [
     "actions",
